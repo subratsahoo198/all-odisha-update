@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal - All Odisha Update</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Reuse main stylesheet styles with login specific additions -->
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: var(--bg-color);
+      padding: 20px;
+    }
+    
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 8px 30px var(--shadow-color);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      animation: fadeIn 0.4s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .login-header {
+      background-color: var(--dark-blue);
+      color: #FFFFFF;
+      padding: 30px 24px;
+      text-align: center;
+    }
+    
+    .login-header h2 {
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+    
+    .login-header h2 span {
+      color: var(--primary-red);
+    }
+    
+    .login-header p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    
+    .login-body {
+      padding: 24px;
+    }
+    
+    .form-group {
+      margin-bottom: 18px;
+    }
+    
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+    
+    .input-icon-wrap {
+      display: flex;
+      align-items: center;
+      background-color: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0 12px;
+    }
+    
+    .input-icon-wrap i {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+    
+    .input-icon-wrap input {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 10px 10px;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      outline: none;
+    }
+    
+    .input-icon-wrap:focus-within {
+      border-color: var(--primary-red);
+    }
+    
+    .login-btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      border-radius: 6px;
+      margin-top: 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .alert-error {
+      background-color: rgba(211, 47, 47, 0.1);
+      color: var(--primary-red);
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      margin-bottom: 16px;
+      border-left: 3px solid var(--primary-red);
+    }
+    
+    .toggle-form-btn {
+      display: block;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--primary-red);
+      background: none;
+      border: none;
+      margin: 18px auto 0 auto;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    
+    .toggle-form-btn:hover {
+      text-decoration: underline;
+    }
+    
+    .back-home {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-decoration: none;
+    }
+    .back-home:hover {
+      color: var(--text-main);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="login-header">
+      <h2>ALL ODISHA <span>UPDATE</span></h2>
+      <p id="portal-subtitle">Admin Dashboard Secure Login</p>
+    </div>
+    
+    <div class="login-body">
+      <!-- Error Alert Box -->
+      <div id="error-alert" class="alert-error hidden">
+        Invalid credentials. Try again.
+      </div>
+      
+      <!-- Login Form -->
+      <form id="login-form">
+        <div class="form-group">
+          <label for="login-email">Email Address</label>
+          <div class="input-icon-wrap">
+            <i class="fa-regular fa-envelope"></i>
+            <input type="email" id="login-email" required placeholder="admin@allodishaupdate.com">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="login-password" required placeholder="••••••••">
+          </div>
+        </div>
+        
+        <button type="submit" class="btn btn-red login-btn" id="login-submit">
+          Login Securely <i class="fa-solid fa-arrow-right-to-bracket"></i>
+        </button>
+      </form>
+
+      <!-- Register/Setup Form (Hidden by default) -->
+      <form id="register-form" class="hidden">
+        <div class="form-group">
+          <label for="reg-name">Full Name</label>
+          <div class="input-icon-wrap">
+            <i class="fa-regular fa-user"></i>
+            <input type="text" id="reg-name" placeholder="John Doe">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-email">Email Address</label>
+          <div class="input-icon-wrap">
+            <i class="fa-regular fa-envelope"></i>
+            <input type="email" id="reg-email" placeholder="admin@allodishaupdate.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-password">Password (min 6 characters)</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="reg-password" placeholder="••••••••">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-secret">Admin Setup Secret Code</label>
+          <div class="input-icon-wrap">
+            <i class="fa-solid fa-key"></i>
+            <input type="password" id="reg-secret" placeholder="Enter registration key">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-red login-btn" id="register-submit">
+          Initialize Admin Account <i class="fa-solid fa-user-plus"></i>
+        </button>
+      </form>
+      
+      <button id="toggle-form-btn" class="toggle-form-btn">
+        First-time Setup? Create Admin Account
+      </button>
+      
+      <a href="/" class="back-home"><i class="fa-solid fa-house"></i> Back to Homepage</a>
+    </div>
+  </div>
+
+  <!-- Main Login Script -->
+  <script src="/js/login.js"></script>
+</body>
+</html>

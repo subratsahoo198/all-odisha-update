@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - All Odisha Update</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+
+  <!-- Top Sticky Header -->
+  <header class="admin-header-bar">
+    <div class="admin-brand">
+      <h1>ALL ODISHA <span>UPDATE</span></h1>
+      <p>Management Portal & Analytics</p>
+    </div>
+    <div class="admin-user">
+      <span class="admin-name" id="admin-welcome">Welcome, Admin</span>
+      <button id="admin-theme-btn" class="icon-btn" style="color:#FFF;" aria-label="Toggle Theme"><i class="fa-solid fa-moon"></i></button>
+      <a href="/" class="btn btn-red btn-sm" style="background-color: transparent; border: 1px solid #FFF;"><i class="fa-solid fa-house"></i> View Site</a>
+      <button id="logout-btn" class="btn btn-red btn-sm"><i class="fa-solid fa-power-off"></i> Logout</button>
+    </div>
+  </header>
+
+  <div class="admin-container">
+    
+    <!-- Metrics Grid -->
+    <section class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-icon icon-posts"><i class="fa-solid fa-newspaper"></i></div>
+        <div class="metric-info">
+          <h3>Total Articles</h3>
+          <p id="metric-total-posts">0</p>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon icon-views"><i class="fa-solid fa-eye"></i></div>
+        <div class="metric-info">
+          <h3>Total Views</h3>
+          <p id="metric-total-views">0</p>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon icon-jobs"><i class="fa-solid fa-briefcase"></i></div>
+        <div class="metric-info">
+          <h3>Job Postings</h3>
+          <p id="metric-total-jobs">0</p>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-icon icon-ads"><i class="fa-solid fa-rectangle-ad"></i></div>
+        <div class="metric-info">
+          <h3>Sponsored Ads</h3>
+          <p id="metric-total-ads">0</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Layout: Sidebar & Form Grid -->
+    <div class="dashboard-layout">
+      
+      <!-- Left Column: Add / Edit Articles & AI Tool -->
+      <div class="dashboard-column flex-col">
+        
+        <!-- Gemini AI Tool -->
+        <div class="dashboard-card" style="margin-bottom: 24px;">
+          <div class="card-header" style="border-left: 4px solid var(--info);">
+            <h2><i class="fa-solid fa-wand-magic-sparkles text-info"></i> Gemini AI Smart Summarizer</h2>
+          </div>
+          <div class="card-body">
+            <div class="ai-helper-box">
+              <p style="font-size: 0.82rem; line-height: 1.4; color: var(--admin-text-dark); margin-bottom: 12px;">
+                Input a news article URL (e.g., from OTV, Sambad, Dharitri) or paste the full English text below. Gemini AI will scrape the page, translate, summarize in 50-80 Odia words, generateheadlines and matching tags.
+              </p>
+              
+              <div class="admin-form-group" style="margin-bottom: 12px;">
+                <label for="ai-url">Article URL (Scrape & Summarize)</label>
+                <input type="url" id="ai-url" class="form-control" placeholder="https://example-news-site.com/odisha-update-url">
+              </div>
+              
+              <p style="text-align: center; font-size: 0.75rem; font-weight: 700; color: var(--admin-text-light); margin: 8px 0;">— OR PASTE TEXT —</p>
+              
+              <div class="admin-form-group" style="margin-bottom: 16px;">
+                <label for="ai-raw-text">Full Article Body Content</label>
+                <textarea id="ai-raw-text" class="form-control" rows="4" placeholder="Paste full article text here..."></textarea>
+              </div>
+              
+              <button id="ai-generate-btn" class="btn btn-red" style="width: 100%; background-color: var(--info); font-weight: 700; display: flex; justify-content: center; gap: 8px;">
+                <i class="fa-solid fa-microchip"></i> Run Gemini AI Auto-Fill
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Manual Publish/Edit News Card -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2 id="form-card-title"><i class="fa-solid fa-pen-nib text-red"></i> Publish News Card</h2>
+            <button id="clear-form-btn" class="btn btn-sm hidden">Cancel Edit</button>
+          </div>
+          <div class="card-body">
+            <form id="news-form">
+              <!-- Hidden ID for edit tracking -->
+              <input type="hidden" id="news-id">
+              
+              <div class="form-row two-col">
+                <div class="admin-form-group">
+                  <label for="news-title">Headline (English) *</label>
+                  <input type="text" id="news-title" class="form-control" required placeholder="Concise English headline">
+                </div>
+                <div class="admin-form-group">
+                  <label for="news-odia-title">Headline (Odia) *</label>
+                  <input type="text" id="news-odia-title" class="form-control" required placeholder="Odia headline">
+                </div>
+              </div>
+
+              <div class="admin-form-group" style="margin-bottom: 16px;">
+                <label for="news-summary">Odia Summary (50-80 Words) *</label>
+                <textarea id="news-summary" class="form-control" rows="4" required placeholder="Short news update summary in Odia..."></textarea>
+              </div>
+
+              <div class="form-row two-col">
+                <div class="admin-form-group">
+                  <label for="news-image">Featured Image URL</label>
+                  <input type="url" id="news-image" class="form-control" placeholder="https://unsplash.com/example.jpg">
+                </div>
+                <div class="admin-form-group">
+                  <label for="news-category">Category *</label>
+                  <select id="news-category" class="form-control" required>
+                    <option value="">-- Select Category --</option>
+                    <option value="Odisha">Odisha</option>
+                    <option value="India">India</option>
+                    <option value="Government Schemes">Government Schemes</option>
+                    <option value="Jobs">Jobs</option>
+                    <option value="Banking">Banking</option>
+                    <option value="Politics">Politics</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Business">Business</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row three-col">
+                <div class="admin-form-group">
+                  <label for="news-source">Source Name</label>
+                  <input type="text" id="news-source" class="form-control" placeholder="All Odisha Update">
+                </div>
+                <div class="admin-form-group">
+                  <label for="news-source-url">Source Link (Read More) URL</label>
+                  <input type="url" id="news-source-url" class="form-control" placeholder="https://source-site.com/original-article">
+                </div>
+                <div class="admin-form-group">
+                  <label for="news-author">Author Name</label>
+                  <input type="text" id="news-author" class="form-control" placeholder="Admin">
+                </div>
+              </div>
+
+              <div class="admin-form-group" style="margin-bottom: 16px;">
+                <label for="news-tags">Tags (Comma Separated)</label>
+                <input type="text" id="news-tags" class="form-control" placeholder="Odisha, Jobs, Scheme, Subhadra">
+              </div>
+
+              <div class="form-row three-col" style="margin-bottom: 20px;">
+                <div class="admin-form-group checkbox-group">
+                  <input type="checkbox" id="news-trending">
+                  <label for="news-trending">Mark Trending</label>
+                </div>
+                <div class="admin-form-group checkbox-group">
+                  <input type="checkbox" id="news-sponsored">
+                  <label for="news-sponsored">Sponsored Ad</label>
+                </div>
+                <div class="admin-form-group checkbox-group">
+                  <input type="checkbox" id="news-job">
+                  <label for="news-job">Job Posting</label>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-red" id="publish-submit-btn" style="width: 100%; font-weight: 700; padding: 12px;">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Publish Article
+              </button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Analytics & Quick Stats -->
+      <div class="dashboard-column flex-col">
+        
+        <!-- Popular Articles (Views) -->
+        <div class="dashboard-card" style="margin-bottom: 24px;">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-arrow-trend-up text-red"></i> Most Viewed Articles</h2>
+          </div>
+          <div class="card-body">
+            <div class="popular-list" id="popular-articles-list">
+              <!-- Popular articles template -->
+              <p style="color:var(--admin-text-light); text-align:center; font-size:0.85rem;">Loading metrics data...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Views by Category -->
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h2><i class="fa-solid fa-chart-pie text-red"></i> Views By Category</h2>
+          </div>
+          <div class="card-body">
+            <div class="popular-list" id="category-stats-list">
+              <!-- Category metrics list -->
+              <p style="color:var(--admin-text-light); text-align:center; font-size:0.85rem;">Loading metrics data...</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bottom Full Width: Manage News Articles -->
+    <section class="dashboard-card">
+      <div class="card-header">
+        <h2><i class="fa-solid fa-list-check text-red"></i> Manage News Database</h2>
+      </div>
+      <div class="card-body">
+        
+        <!-- Search & Filter bar -->
+        <div class="form-row two-col" style="margin-bottom: 16px;">
+          <div class="admin-form-group">
+            <input type="text" id="manage-search-input" class="form-control" placeholder="Search database titles...">
+          </div>
+          <div class="admin-form-group">
+            <select id="manage-category-filter" class="form-control">
+              <option value="">All Categories</option>
+              <option value="Odisha">Odisha</option>
+              <option value="India">India</option>
+              <option value="Government Schemes">Government Schemes</option>
+              <option value="Jobs">Jobs</option>
+              <option value="Banking">Banking</option>
+              <option value="Politics">Politics</option>
+              <option value="Technology">Technology</option>
+              <option value="Sports">Sports</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Business">Business</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Headline</th>
+                <th>Category</th>
+                <th>Views</th>
+                <th>Flags</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-news-table-body">
+              <!-- Dynamic rows here -->
+              <tr>
+                <td colspan="6" style="text-align: center; padding: 20px; color: var(--admin-text-light);">
+                  <div class="spinner" style="margin: 0 auto 10px auto;"></div> Loading articles database...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Table Pagination -->
+        <div class="pagination-controls">
+          <span class="page-info" id="admin-table-page-info">Page 1 of 1 (0 total)</span>
+          <div class="table-actions">
+            <button class="btn btn-sm" id="admin-prev-page-btn" disabled><i class="fa-solid fa-angle-left"></i> Previous</button>
+            <button class="btn btn-sm" id="admin-next-page-btn" disabled>Next <i class="fa-solid fa-angle-right"></i></button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Custom Alert Toast -->
+  <div id="toast" class="toast hidden">
+    <span id="toast-message">Success!</span>
+  </div>
+
+  <!-- Dashboard JavaScript Handler -->
+  <script src="/js/admin.js"></script>
+</body>
+</html>

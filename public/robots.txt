@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /login.html
+Disallow: /api/admin/
+Disallow: /api/ai/
+
+Sitemap: https://allodishaupdate.com/sitemap.xml

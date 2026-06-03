@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>All Odisha Update - Fast, Reliable & Short News Updates</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Get the latest Odisha news, government schemes, jobs, banking updates, technology news, and public awareness in short, concise summaries.">
+  <meta name="keywords" content="Odisha News, Odisha Government Schemes, Odisha Jobs, Odisha Banking updates, Odisha Politics, Odia News, Inshorts Odisha">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://allodishaupdate.com/">
+  <meta property="og:title" content="All Odisha Update - Short News Updates">
+  <meta property="og:description" content="Get the latest Odisha news, government schemes, jobs, banking updates, technology news, and public awareness in short, concise summaries.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=800&q=80">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://allodishaupdate.com/">
+  <meta property="twitter:title" content="All Odisha Update - Short News Updates">
+  <meta property="twitter:description" content="Get the latest Odisha news, government schemes, jobs, banking updates, technology news, and public awareness in short, concise summaries.">
+  <meta property="twitter:image" content="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=800&q=80">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <!-- Web App Manifest & Favicon (Fallback) -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" href="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=32&q=80">
+  <meta name="theme-color" content="#d90429">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Odisha Update">
+  
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "NewsMediaOrganization",
+    "name": "All Odisha Update",
+    "url": "https://allodishaupdate.com",
+    "logo": "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=800&q=80",
+    "sameAs": [],
+    "slogan": "Fast, Reliable & Short News Updates"
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Offline Banner -->
+  <div id="offline-banner" class="offline-banner hidden">
+    <i class="fa-solid fa-wifi-slash"></i> You are currently offline. Showing cached contents.
+  </div>
+
+  <!-- Sticky Header -->
+  <header class="main-header">
+    <div class="header-container">
+      <div class="brand">
+        <h1 class="logo-text">ALL ODISHA <span>UPDATE</span></h1>
+        <p class="tagline">Fast, Reliable & Short News Updates</p>
+      </div>
+      <div class="header-actions">
+        <button id="search-btn" class="icon-btn" aria-label="Search News"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button id="theme-btn" class="icon-btn" aria-label="Toggle Theme"><i class="fa-solid fa-moon"></i></button>
+        <button id="bookmarks-btn" class="icon-btn" aria-label="View Bookmarks"><i class="fa-solid fa-bookmark"></i></button>
+        <a href="/login.html" class="icon-btn admin-link-btn" aria-label="Admin Panel"><i class="fa-solid fa-user-gear"></i></a>
+      </div>
+    </div>
+
+    <!-- Category Navigation Bar (Horizontally scrollable) -->
+    <nav class="category-nav">
+      <div class="category-list">
+        <button class="cat-chip active" data-category="">All News</button>
+        <button class="cat-chip" data-category="Odisha">Odisha</button>
+        <button class="cat-chip" data-category="India">India</button>
+        <button class="cat-chip" data-category="Government Schemes">Schemes</button>
+        <button class="cat-chip" data-category="Jobs">Jobs</button>
+        <button class="cat-chip" data-category="Banking">Banking</button>
+        <button class="cat-chip" data-category="Politics">Politics</button>
+        <button class="cat-chip" data-category="Technology">Tech</button>
+        <button class="cat-chip" data-category="Sports">Sports</button>
+        <button class="cat-chip" data-category="Entertainment">Entertainment</button>
+        <button class="cat-chip" data-category="Business">Business</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Breaking News Ticker -->
+  <div class="ticker-wrap">
+    <div class="ticker-title">Breaking News</div>
+    <div class="ticker">
+      <div class="ticker-item-wrapper" id="ticker-items">
+        <div class="ticker-item">Loading latest breaking news updates...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Feed Container -->
+  <main class="feed-container">
+    <div id="trending-section" class="trending-container hidden">
+      <h2 class="section-title"><i class="fa-solid fa-fire text-red"></i> Trending in Odisha</h2>
+      <div class="trending-cards" id="trending-cards-container">
+        <!-- Trending news cards injected here -->
+      </div>
+    </div>
+
+    <div class="feed-title-bar">
+      <h2 id="feed-title" class="section-title">Latest Updates</h2>
+    </div>
+
+    <div id="news-feed" class="news-feed">
+      <!-- News cards injected here dynamically -->
+      
+      <!-- Skeleton Loaders (Initial state) -->
+      <div class="news-card skeleton-card">
+        <div class="skeleton skeleton-image"></div>
+        <div class="skeleton-body">
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text"></div>
+          <div class="skeleton skeleton-text-short"></div>
+          <div class="skeleton-footer">
+            <div class="skeleton skeleton-btn"></div>
+            <div class="skeleton skeleton-btn"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading Indicator / Sentinel for Infinite Scroll -->
+    <div id="loading-sentinel" class="loading-sentinel">
+      <div class="spinner"></div>
+      <p>Loading more updates...</p>
+    </div>
+
+    <!-- End of Feed Message -->
+    <div id="end-message" class="end-message hidden">
+      <i class="fa-solid fa-circle-check"></i> You have read all the latest updates!
+    </div>
+
+    <!-- Error State -->
+    <div id="error-state" class="error-state hidden">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <p id="error-message">Oops! Something went wrong while loading the news.</p>
+      <button class="btn btn-red" onclick="window.location.reload()"><i class="fa-solid fa-arrows-rotate"></i> Retry</button>
+    </div>
+  </main>
+
+  <!-- Floating Scroll To Top Button -->
+  <button id="scroll-top-btn" class="scroll-top-btn" aria-label="Scroll to top">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
+
+  <!-- Search Modal Overlay -->
+  <div id="search-modal" class="modal-overlay hidden">
+    <div class="search-modal-content">
+      <div class="search-header">
+        <h3 class="modal-title">Search News</h3>
+        <button id="close-search-btn" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="search-body">
+        <div class="search-input-wrapper">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="search-input" placeholder="Type keywords (e.g. Subhadra Yojana, Jobs)..." autofocus autocomplete="off">
+          <button id="clear-search-btn" class="clear-btn hidden"><i class="fa-solid fa-circle-xmark"></i></button>
+        </div>
+        <div class="search-results-info hidden" id="search-results-info">
+          Found <span id="search-count">0</span> results
+        </div>
+        <div class="search-results" id="search-results-container">
+          <!-- Search result cards -->
+          <div class="search-placeholder">
+            <i class="fa-solid fa-newspaper"></i>
+            <p>Start typing to search articles instantly...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bookmarks Modal Overlay -->
+  <div id="bookmarks-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fa-solid fa-bookmark text-red"></i> My Bookmarks</h3>
+        <button id="close-bookmarks-btn" class="close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" id="bookmarks-container">
+        <!-- Bookmarked news items -->
+        <div class="empty-bookmarks">
+          <i class="fa-solid fa-bookmark-slash"></i>
+          <p>No bookmarks saved yet. Click the bookmark icon on any news card to save it here.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ad Template / Monetization Spaces (Floating & inline placeholders) -->
+  <template id="ad-card-template">
+    <div class="news-card ad-card">
+      <div class="ad-badge">SPONSORED / ADVERTISEMENT</div>
+      <div class="ad-content-wrapper">
+        <div class="ad-image-container">
+          <img src="https://images.unsplash.com/photo-1542744094-3a31f103e35f?auto=format&fit=crop&w=400&q=80" alt="Sponsored Ad" class="ad-image" loading="lazy">
+        </div>
+        <div class="ad-body">
+          <h3 class="ad-title">Arogya Odisha Health Insurance</h3>
+          <p class="ad-desc">Explore premium healthcare solutions for your family with cashless treatments across all major hospitals in Odisha. Apply online today.</p>
+          <a href="#" target="_blank" rel="noopener" class="btn btn-red btn-sm ad-link-btn">Learn More <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Custom Alert Toast -->
+  <div id="toast" class="toast hidden">
+    <span id="toast-message">News Bookmarked!</span>
+  </div>
+
+  <!-- App Main Scripts -->
+  <script src="/js/app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('Service Worker registered successfully:', reg.scope))
+          .catch((err) => console.error('Service Worker registration failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>
