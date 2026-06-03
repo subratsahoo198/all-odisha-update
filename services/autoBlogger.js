@@ -28,7 +28,7 @@ const getOTVLinks = async () => {
         }
       }
     });
-    return Array.from(links).slice(0, 5);
+    return Array.from(links).slice(0, 15);
   } catch (error) {
     console.error('[Auto-Blogger] Error fetching OTV links:', error.message);
     return [];
@@ -57,7 +57,7 @@ const getDharitriLinks = async () => {
         }
       }
     });
-    return Array.from(links).slice(0, 5);
+    return Array.from(links).slice(0, 15);
   } catch (error) {
     console.error('[Auto-Blogger] Error fetching Dharitri links:', error.message);
     return [];
@@ -88,7 +88,7 @@ const getGoogleNewsLinks = async () => {
       }
     });
 
-    return Array.from(links).slice(0, 5); // Return top 5 Google News links
+    return Array.from(links); // Return all harvested Google News links
   } catch (error) {
     console.error('[Auto-Blogger] Error fetching Google News links:', error.message);
     return [];
@@ -168,7 +168,7 @@ const runAutoBlogger = async () => {
         summary: summaryResult.summary,
         image: scraped.image || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=800&q=80',
         category: category,
-        source: sourceName,
+        source: 'All Odisha Update',
         sourceUrl: url,
         author: 'AI Auto-Blogger',
         tags: summaryResult.tags || ['Odisha', 'AutoPost'],

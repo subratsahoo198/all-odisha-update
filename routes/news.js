@@ -3,6 +3,13 @@ const router = express.Router();
 const News = require('../models/News');
 const jsonDb = require('../services/jsonDb');
 
+const sanitizeNews = (news) => {
+  if (!news) return null;
+  const doc = news.toObject ? news.toObject() : { ...news };
+  doc.source = 'All Odisha Update';
+  return doc;
+};
+
 // @desc    Get all news (paginated, option to filter by category or flag)
 // @route   GET /api/news
 // @access  Public
@@ -44,7 +51,7 @@ router.get('/', async (req, res) => {
           totalPages: Math.ceil(total / limit),
           totalNews: total
         },
-        data: newsList
+        data: newsList.map(sanitizeNews)
       });
     } else {
       // JSON File Fallback
@@ -65,7 +72,7 @@ router.get('/', async (req, res) => {
           totalPages: result.totalPages,
           totalNews: result.total
         },
-        data: result.data
+        data: result.data.map(sanitizeNews)
       });
     }
   } catch (error) {
@@ -82,10 +89,10 @@ router.get('/trending', async (req, res) => {
       const trendingNews = await News.find({ isTrending: true })
         .sort({ publishedAt: -1 })
         .limit(10);
-      res.json({ success: true, count: trendingNews.length, data: trendingNews });
+      res.json({ success: true, count: trendingNews.length, data: trendingNews.map(sanitizeNews) });
     } else {
       const trendingNews = jsonDb.getTrendingNews();
-      res.json({ success: true, count: trendingNews.length, data: trendingNews });
+      res.json({ success: true, count: trendingNews.length, data: trendingNews.map(sanitizeNews) });
     }
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
@@ -132,7 +139,7 @@ router.get('/search', async (req, res) => {
           totalPages: Math.ceil(total / limit),
           totalNews: total
         },
-        data: newsList
+        data: newsList.map(sanitizeNews)
       });
     } else {
       // JSON File Fallback
@@ -146,7 +153,7 @@ router.get('/search', async (req, res) => {
           totalPages: result.totalPages,
           totalNews: result.total
         },
-        data: result.data
+        data: result.data.map(sanitizeNews)
       });
     }
   } catch (error) {
@@ -181,7 +188,7 @@ router.get('/category/:category', async (req, res) => {
           totalPages: Math.ceil(total / limit),
           totalNews: total
         },
-        data: newsList
+        data: newsList.map(sanitizeNews)
       });
     } else {
       // JSON File Fallback
@@ -195,7 +202,7 @@ router.get('/category/:category', async (req, res) => {
           totalPages: result.totalPages,
           totalNews: result.total
         },
-        data: result.data
+        data: result.data.map(sanitizeNews)
       });
     }
   } catch (error) {
@@ -219,14 +226,14 @@ router.get('/:id', async (req, res) => {
         return res.status(404).json({ success: false, message: 'News article not found' });
       }
 
-      res.json({ success: true, data: news });
+      res.json({ success: true, data: sanitizeNews(news) });
     } else {
       // JSON File Fallback
       const news = jsonDb.getNewsById(req.params.id, true);
       if (!news) {
         return res.status(404).json({ success: false, message: 'News article not found' });
       }
-      res.json({ success: true, data: news });
+      res.json({ success: true, data: sanitizeNews(news) });
     }
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });

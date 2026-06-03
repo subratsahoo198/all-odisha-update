@@ -7,7 +7,7 @@ const state = {
   theme: 'light',
   currentCategory: '',
   page: 1,
-  limit: 6,
+  limit: 12,
   isLoading: false,
   hasMore: true,
   searchQuery: '',
@@ -229,7 +229,7 @@ function renderNewsCards(newsArray) {
       </div>
       <div class="card-body">
         <div class="card-meta">
-          <strong>${news.source || 'All Odisha Update'}</strong>
+          <strong>All Odisha Update</strong>
           <span class="meta-bullet">•</span>
           <span>By ${news.author || 'Admin'}</span>
           <span class="meta-bullet">•</span>
