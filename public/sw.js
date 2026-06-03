@@ -1,4 +1,4 @@
-const CACHE_NAME = 'odisha-update-cache-v5';
+const CACHE_NAME = 'odisha-update-cache-v7';
 const ASSETS = [
   '/',
   '/index.html',

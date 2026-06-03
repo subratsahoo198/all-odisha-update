@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
   fetchNews(true); // Initial load
   setupEventListeners();
   setupInfiniteScroll();
+  setMobileOdiaDate();
 });
 
 // Setup Observers & Listeners
@@ -591,4 +592,38 @@ function debounce(func, delay) {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => func.apply(context, args), delay);
   };
+}
+
+function setMobileOdiaDate() {
+  const dateEl = document.getElementById('mobile-today-date');
+  if (dateEl) {
+    try {
+      const date = new Date();
+      const days = {
+        'Sunday': 'ରବିବାର', 'Monday': 'ସୋମବାର', 'Tuesday': 'ମଙ୍ଗଳବାର',
+        'Wednesday': 'ବୁଧବାର', 'Thursday': 'ଗୁରୁବାର', 'Friday': 'ଶୁକ୍ରବାର', 'Saturday': 'ଶନିବାର'
+      };
+      const months = {
+        'January': 'ଜାନୁଆରୀ', 'February': 'ଫେବୃଆରୀ', 'March': 'ମାର୍ଚ୍ଚ', 'April': 'ଅପ୍ରେଲ',
+        'May': 'ମେ', 'June': 'ଜୁନ', 'July': 'ଜୁଲାଇ', 'August': 'ଅଗଷ୍ଟ',
+        'September': 'ସେପ୍ଟେମ୍ବର', 'October': 'ଅକ୍ଟୋବର', 'November': 'ନଭେମ୍ବର', 'December': 'ଡିସେମ୍ବର'
+      };
+      const numerals = {
+        '0': '୦', '1': '୧', '2': '୨', '3': '୩', '4': '୪',
+        '5': '୫', '6': '୬', '7': '୭', '8': '୮', '9': '୯'
+      };
+      const dayName = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(date);
+      const monthName = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(date);
+      const dayNum = String(date.getDate());
+      const yearNum = String(date.getFullYear());
+      const odiaDayName = days[dayName] || dayName;
+      const odiaMonthName = months[monthName] || monthName;
+      const odiaDayNum = dayNum.split('').map(char => numerals[char] || char).join('');
+      const odiaYearNum = yearNum.split('').map(char => numerals[char] || char).join('');
+      dateEl.textContent = `${odiaDayName}, ${odiaMonthName} ${odiaDayNum}, ${odiaYearNum}`;
+    } catch (e) {
+      console.error('Failed to format Odia date:', e);
+      dateEl.textContent = new Date().toLocaleDateString();
+    }
+  }
 }

@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="/css/style.css?v=4.0">
+  <link rel="stylesheet" href="/css/style.css?v=6.0">
   
   <!-- Web App Manifest & Favicon (Fallback) -->
   <link rel="manifest" href="/manifest.json">
@@ -62,7 +62,8 @@
 
   <!-- Sticky Header -->
   <header class="main-header">
-    <div class="header-container">
+    <!-- Desktop Header -->
+    <div class="header-container desktop-header-only">
       <div class="brand">
         <h1 class="logo-text">ALL ODISHA <span>UPDATE</span></h1>
         <p class="tagline">Fast, Reliable & Short News Updates</p>
@@ -73,6 +74,12 @@
         <button id="bookmarks-btn" class="icon-btn" aria-label="View Bookmarks"><i class="fa-solid fa-bookmark"></i></button>
         <a href="/login.html" class="icon-btn admin-link-btn" aria-label="Admin Panel"><i class="fa-solid fa-user-gear"></i></a>
       </div>
+    </div>
+
+    <!-- Mobile Header (Hides standard header, displays Today's Date in Odia & Odisha News) -->
+    <div class="mobile-header-only">
+      <div class="mobile-brand">ଓଡ଼ିଶା ନ୍ୟୁଜ୍</div>
+      <div class="mobile-date" id="mobile-today-date"></div>
     </div>
 
     <!-- Category Navigation Bar (Horizontally scrollable) -->
@@ -226,7 +233,7 @@
   </div>
 
   <!-- App Main Scripts -->
-  <script src="/js/app.js?v=4.0"></script>
+  <script src="/js/app.js?v=6.0"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {

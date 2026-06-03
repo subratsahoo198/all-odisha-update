@@ -123,6 +123,10 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
 }
 
+.mobile-header-only {
+  display: none;
+}
+
 /* Icon Buttons */
 .icon-btn {
   background: none;
@@ -1139,5 +1143,32 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: 0 !important;
     display: flex;
     flex-direction: column;
+  }
+
+  .desktop-header-only {
+    display: none !important;
+  }
+
+  .mobile-header-only {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .mobile-brand {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: #FFFFFF;
+    letter-spacing: 0.5px;
+  }
+
+  .mobile-date {
+    font-size: 0.8rem;
+    color: #cbd5e1; /* slate 300 - premium text muted */
+    font-weight: 500;
   }
 }
