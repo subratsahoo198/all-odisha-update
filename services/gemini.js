@@ -1,4 +1,28 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const axios = require('axios');
+
+/**
+ * Free translation helper to translate English to Odia
+ */
+const translateToOdia = async (text) => {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=or&dt=t&q=${encodeURIComponent(text)}`;
+    const response = await axios.get(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0'
+      },
+      timeout: 5000
+    });
+    if (response.data && response.data[0]) {
+      return response.data[0].map(item => item[0]).join('');
+    }
+    return text;
+  } catch (err) {
+    console.error('[Translation Fallback] Google Translate error:', err.message);
+    return text;
+  }
+};
+
 
 // Local translation/summarization dictionary for testing and fallback
 const MOCK_DICTIONARY = [
@@ -143,12 +167,28 @@ const generateSummary = async (title, content, url = '') => {
       return matchedItem.data;
     }
 
-    // Generic Mock Generator if not in dictionary
+    // Generic Mock Generator if not in dictionary - Translate using free translate API
     const sanitizedTitle = title || 'All Odisha Update News';
+    const translatedHeadline = await translateToOdia(sanitizedTitle);
+    
+    // Extract first 2 sentences or first 250 characters of content, and translate it to Odia.
+    let baseText = content ? content.replace(/\[Mock AI Mode\]/gi, '').trim() : '';
+    if (baseText.length < 40) {
+      baseText = `${sanitizedTitle}. Detailed information will be available soon.`;
+    }
+    
+    // Get the first two sentences to summarize
+    let summarySource = baseText.split(/[.।]/).slice(0, 2).join('.') + '.';
+    if (summarySource.length < 50) {
+      summarySource = baseText.substring(0, 200);
+    }
+    
+    const translatedSummary = await translateToOdia(summarySource);
+
     return {
       headline: sanitizedTitle,
-      odiaHeadline: `ଖବର ଅପଡେଟ୍: ${sanitizedTitle}`,
-      summary: `[Mock AI Mode] ସୂଚନା ଅନୁଯାୟୀ, ${sanitizedTitle} ସମ୍ପର୍କରେ ରାଜ୍ୟରେ ଆଲୋଚନା ଜୋର ଧରିଛି। ବିଭାଗୀୟ ଅଧିକାରୀମାନେ ଏହାର ଯାଞ୍ଚ କରୁଛନ୍ତି। ଉନ୍ନୟନମୂଳକ କାର୍ଯ୍ୟକୁ ତ୍ୱରାନ୍ୱିତ କରିବା ପାଇଁ ପଦକ୍ଷେପ ଗ୍ରହଣ କରାଯାଉଛି ବୋଲି ଜଣାପଡ଼ିଛି। ସମ୍ପୂର୍ଣ୍ଣ ସୂଚନା ଶୀଘ୍ର ମିଳିବ।`,
+      odiaHeadline: translatedHeadline,
+      summary: translatedSummary,
       tags: ["OdishaNews", "LocalUpdate", "BreakingNews"]
     };
   }

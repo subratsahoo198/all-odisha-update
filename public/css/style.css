@@ -1115,13 +1115,11 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .card-summary {
-    font-size: 0.8rem !important;
-    line-height: 1.4 !important;
+    font-size: 0.85rem !important;
+    line-height: 1.5 !important;
     margin-bottom: 8px !important;
-    display: -webkit-box;
-    -webkit-line-clamp: 5; /* Clamp text so it fits mobile screens perfectly */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    display: block !important;
+    overflow: visible !important;
   }
 
   .card-tags {

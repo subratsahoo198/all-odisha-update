@@ -6,6 +6,45 @@ const jsonDb = require('./jsonDb');
 const News = require('../models/News');
 
 /**
+ * Decodes Google News RSS article URLs to their actual publisher URLs
+ */
+const getArticleUrl = async (googleRssUrl) => {
+  try {
+    const response = await axios.get(googleRssUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+      },
+      timeout: 5000
+    });
+    const $ = cheerio.load(response.data);
+    const data = $('c-wiz[data-p]').attr('data-p');
+    if (!data) return googleRssUrl;
+    
+    const obj = JSON.parse(data.replace('%.@.', '["garturlreq",'));
+    const payload = { 
+      'f.req': JSON.stringify([[['Fbv4je', JSON.stringify([...obj.slice(0, -6), ...obj.slice(-2)]), 'null', 'generic']]]) 
+    };
+    
+    const headers = { 
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'
+    };
+    
+    const postResponse = await axios.post('https://news.google.com/_/DotsSplashUi/data/batchexecute', 
+      new URLSearchParams(payload).toString(), 
+      { headers, timeout: 5000 }
+    );
+    
+    const arrayString = JSON.parse(postResponse.data.replace(")]}'\n", ""))[0][2];
+    const decodedUrl = JSON.parse(arrayString)[1];
+    return decodedUrl || googleRssUrl;
+  } catch (e) {
+    console.error('[Auto-Blogger] Decoding Google News URL failed:', e.message);
+    return googleRssUrl;
+  }
+};
+
+/**
  * Crawls Odisha TV homepage to find recently published article URLs
  */
 const getOTVLinks = async () => {
@@ -129,8 +168,16 @@ const runAutoBlogger = async () => {
 
   let addedCount = 0;
 
-  for (const url of allLinks) {
+  for (let url of allLinks) {
     try {
+      if (url.includes('news.google.com')) {
+        console.log(`[Auto-Blogger] Resolving Google News redirect URL: ${url}`);
+        const resolvedUrl = await getArticleUrl(url);
+        if (resolvedUrl) {
+          url = resolvedUrl;
+        }
+      }
+
       const exists = await checkIfArticleExists(url);
       if (exists) {
         continue; // Skip already published articles

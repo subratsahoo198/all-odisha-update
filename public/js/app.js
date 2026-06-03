@@ -229,15 +229,10 @@ function renderNewsCards(newsArray) {
       </div>
       <div class="card-body">
         <div class="card-meta">
-          <strong>All Odisha Update</strong>
-          <span class="meta-bullet">•</span>
-          <span>By ${news.author || 'Admin'}</span>
-          <span class="meta-bullet">•</span>
           <span>${publishedDate}</span>
         </div>
         
-        ${news.odiaHeadline ? `<h3 class="card-headline odia">${news.odiaHeadline}</h3>` : ''}
-        <h4 class="card-headline">${news.title}</h4>
+        <h3 class="card-headline odia">${news.odiaHeadline || news.title}</h3>
         
         <p class="card-summary">${news.summary}</p>
         
