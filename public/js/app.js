@@ -2,6 +2,11 @@
  * ALL ODISHA UPDATE - Client Application Logic
  */
 
+// API Base Configuration (Empty for relative web calls, configured for Android Emulator or production server URL)
+const API_BASE = (typeof window !== 'undefined' && (window.location.origin.startsWith('file://') || window.Capacitor || (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && !window.location.hostname.startsWith('192.168.'))))
+  ? 'http://10.0.2.2:5001' // Replace with your production domain (e.g., https://all-odisha-update.com) when deploying to a real server!
+  : '';
+
 // Application State
 const state = {
   theme: 'light',
@@ -13,7 +18,8 @@ const state = {
   searchQuery: '',
   searchPage: 1,
   searchHasMore: true,
-  bookmarks: []
+  bookmarks: [],
+  deferredPrompt: null
 };
 
 // DOM Elements
@@ -51,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupEventListeners();
   setupInfiniteScroll();
   setMobileOdiaDate();
+  setupPWAInstallFlow();
 });
 
 // Setup Observers & Listeners
@@ -140,7 +147,7 @@ async function fetchNews(isNewFetch = false) {
   }
 
   try {
-    let url = `/api/news?page=${state.page}&limit=${state.limit}`;
+    let url = `${API_BASE}/api/news?page=${state.page}&limit=${state.limit}`;
     if (state.currentCategory) {
       url += `&category=${encodeURIComponent(state.currentCategory)}`;
     }
@@ -273,7 +280,7 @@ function renderNewsCards(newsArray) {
 
 async function fetchBreakingNews() {
   try {
-    const res = await fetch('/api/news?limit=5');
+    const res = await fetch(`${API_BASE}/api/news?limit=5`);
     const result = await res.json();
     if (result.success && result.data.length > 0) {
       tickerItems.innerHTML = '';
@@ -313,7 +320,7 @@ async function handleSearch(e) {
   searchResultsContainer.innerHTML = '<div class="loading-sentinel"><div class="spinner"></div></div>';
 
   try {
-    const res = await fetch(`/api/news/search?q=${encodeURIComponent(query)}`);
+    const res = await fetch(`${API_BASE}/api/news/search?q=${encodeURIComponent(query)}`);
     const result = await res.json();
 
     if (result.success) {
@@ -417,7 +424,7 @@ async function renderBookmarksDrawer() {
   try {
     // Fetch individual news details for bookmarks
     const fetchPromises = state.bookmarks.map(id => 
-      fetch(`/api/news/${id}`).then(res => res.json().catch(() => null))
+      fetch(`${API_BASE}/api/news/${id}`).then(res => res.json().catch(() => null))
     );
 
     const responses = await Promise.all(fetchPromises);
@@ -543,7 +550,7 @@ function shareArticle(newsJsonEncoded, event) {
 
 function trackReadMore(newsId) {
   // Call news single GET endpoint asynchronously to register the view count increase
-  fetch(`/api/news/${newsId}`).catch(err => console.log('Analytics ping failed'));
+  fetch(`${API_BASE}/api/news/${newsId}`).catch(err => console.log('Analytics ping failed'));
 }
 
 // --------------------------------------------------------------------------
@@ -626,4 +633,72 @@ function setMobileOdiaDate() {
       dateEl.textContent = new Date().toLocaleDateString();
     }
   }
+}
+
+function setupPWAInstallFlow() {
+  const installBanner = document.getElementById('pwa-install-banner');
+  const installBtn = document.getElementById('pwa-install-btn');
+  const closeBtn = document.getElementById('pwa-close-btn');
+  const iosModal = document.getElementById('ios-install-modal');
+  const iosCloseBtn = document.getElementById('ios-close-btn');
+
+  if (!installBanner || !installBtn || !closeBtn || !iosModal || !iosCloseBtn) return;
+
+  // Check if browser is iOS
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const isInStandaloneMode = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+
+  // Show iOS install instructions if on iOS and not installed
+  if (isIOS && !isInStandaloneMode) {
+    // Show banner after 4 seconds
+    setTimeout(() => {
+      if (!localStorage.getItem('pwa_banner_dismissed')) {
+        installBanner.classList.remove('hidden');
+      }
+    }, 4000);
+  }
+
+  // Handle standard Android/Desktop Chrome install prompt
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    state.deferredPrompt = e;
+    setTimeout(() => {
+      if (!localStorage.getItem('pwa_banner_dismissed')) {
+        installBanner.classList.remove('hidden');
+      }
+    }, 4000);
+  });
+
+  // Handle install button click
+  installBtn.addEventListener('click', async () => {
+    if (isIOS) {
+      iosModal.classList.remove('hidden');
+      installBanner.classList.add('hidden');
+      return;
+    }
+
+    const promptEvent = state.deferredPrompt;
+    if (!promptEvent) {
+      // Fallback if no prompt event is available yet (standard user guidance)
+      showToast('ଇନଷ୍ଟଲ୍ କରିବା ପାଇଁ ବ୍ରାଉଜର୍ ମେନୁରୁ "Install App" ଚୟନ କରନ୍ତୁ।');
+      return;
+    }
+    promptEvent.prompt();
+    const { outcome } = await promptEvent.userChoice;
+    console.log(`User response to the install prompt: ${outcome}`);
+    state.deferredPrompt = null;
+    installBanner.classList.add('hidden');
+  });
+
+  // Close banner
+  closeBtn.addEventListener('click', () => {
+    installBanner.classList.add('hidden');
+    localStorage.setItem('pwa_banner_dismissed', 'true');
+  });
+
+  // Close iOS modal
+  iosCloseBtn.addEventListener('click', () => {
+    iosModal.classList.add('hidden');
+    localStorage.setItem('pwa_banner_dismissed', 'true');
+  });
 }

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">All Odisha Update</string>
+    <string name="title_activity_main">All Odisha Update</string>
+    <string name="package_name">com.allodishaupdate.news</string>
+    <string name="custom_url_scheme">com.allodishaupdate.news</string>
+</resources>

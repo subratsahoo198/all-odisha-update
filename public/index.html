@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="/css/style.css?v=6.0">
+  <link rel="stylesheet" href="/css/style.css?v=7.0">
   
   <!-- Web App Manifest & Favicon (Fallback) -->
   <link rel="manifest" href="/manifest.json">
@@ -227,13 +227,47 @@
     </div>
   </template>
 
+  <!-- PWA Install Banner -->
+  <div id="pwa-install-banner" class="pwa-install-banner hidden">
+    <div class="pwa-install-content">
+      <i class="fa-solid fa-mobile-screen-button pwa-icon"></i>
+      <div class="pwa-text">
+        <h4>ଆପ୍ ଡାଉନଲୋଡ୍ କରନ୍ତୁ</h4>
+        <p>All Odisha Update App କୁ ନିଜ ମୋବାଇଲ୍‌ରେ ଇନଷ୍ଟଲ୍ କରନ୍ତୁ।</p>
+      </div>
+    </div>
+    <div class="pwa-actions">
+      <button id="pwa-install-btn" class="btn btn-red btn-sm">ଇନଷ୍ଟଲ୍</button>
+      <button id="pwa-close-btn" class="pwa-close-btn" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+  </div>
+
+  <!-- iOS PWA Install Instructions Modal -->
+  <div id="ios-install-modal" class="ios-install-modal hidden">
+    <div class="ios-modal-content">
+      <button id="ios-close-btn" class="ios-close-btn" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      <div class="ios-modal-header">
+        <i class="fa-brands fa-apple apple-icon"></i>
+        <h3>ଇନଷ୍ଟଲ୍ ନିର୍ଦ୍ଦେଶାବଳୀ</h3>
+      </div>
+      <div class="ios-modal-body">
+        <p>ଆପଣଙ୍କ iPhone କିମ୍ବା iPad ରେ ଆପ୍ ଡାଉନଲୋଡ୍ କରିବା ପାଇଁ:</p>
+        <ol>
+          <li>ସଫାରୀ ବ୍ରାଉଜର୍ ଖୋଲନ୍ତୁ।</li>
+          <li>ତଳ ବାର୍‌ରେ ଥିବା ସେୟାର୍ ଆଇକନ୍ <strong>(Share) <i class="fa-solid fa-arrow-up-from-bracket"></i></strong> ଉପରେ କ୍ଲିକ୍ କରନ୍ତୁ।</li>
+          <li>ସ୍କ୍ରୋଲ୍ କରି <strong>'Add to Home Screen' <i class="fa-regular fa-square-plus"></i></strong> ବିକଳ୍ପକୁ ଚୟନ କରନ୍ତୁ।</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
   <!-- Custom Alert Toast -->
   <div id="toast" class="toast hidden">
     <span id="toast-message">News Bookmarked!</span>
   </div>
 
   <!-- App Main Scripts -->
-  <script src="/js/app.js?v=6.0"></script>
+  <script src="/js/app.js?v=7.0"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
