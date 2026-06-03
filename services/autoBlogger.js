@@ -23,13 +23,12 @@ const getOTVLinks = async () => {
         if (href.startsWith('/')) {
           href = 'https://odishatv.in' + href;
         }
-        // Match OTV article pattern (typically ending with a unique article number ID)
         if (href.includes('https://odishatv.in/') && /\-\d{6,12}$/.test(href)) {
           links.add(href);
         }
       }
     });
-    return Array.from(links).slice(0, 5); // Return top 5 articles
+    return Array.from(links).slice(0, 5);
   } catch (error) {
     console.error('[Auto-Blogger] Error fetching OTV links:', error.message);
     return [];
@@ -52,16 +51,46 @@ const getDharitriLinks = async () => {
       let href = $(el).attr('href');
       if (href) {
         if (href.includes('dharitri.com/') && href.split('/').filter(Boolean).length > 3) {
-          // Avoid tags, author, and category archives
           if (!href.includes('/category/') && !href.includes('/tag/') && !href.includes('/author/') && !href.includes('/wp-content/')) {
             links.add(href);
           }
         }
       }
     });
-    return Array.from(links).slice(0, 5); // Return top 5 articles
+    return Array.from(links).slice(0, 5);
   } catch (error) {
     console.error('[Auto-Blogger] Error fetching Dharitri links:', error.message);
+    return [];
+  }
+};
+
+/**
+ * Fetches latest Google News articles for "Odisha" via the free RSS feed
+ */
+const getGoogleNewsLinks = async () => {
+  try {
+    // Search query HL=en-IN, GL=IN for local India results on Odisha
+    const url = 'https://news.google.com/rss/search?q=Odisha&hl=en-IN&gl=IN&ceid=IN:en';
+    const response = await axios.get(url, {
+      headers: { 
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36' 
+      },
+      timeout: 6000
+    });
+    
+    const $ = cheerio.load(response.data, { xmlMode: true });
+    const links = new Set();
+
+    $('item').each((i, el) => {
+      const link = $(el).find('link').text().trim();
+      if (link && link.startsWith('http')) {
+        links.add(link);
+      }
+    });
+
+    return Array.from(links).slice(0, 5); // Return top 5 Google News links
+  } catch (error) {
+    console.error('[Auto-Blogger] Error fetching Google News links:', error.message);
     return [];
   }
 };
@@ -84,11 +113,12 @@ const checkIfArticleExists = async (url) => {
  * Runs the complete Auto-Blog pipeline
  */
 const runAutoBlogger = async () => {
-  console.log('[Auto-Blogger] Starting automated news check...');
+  console.log('[Auto-Blogger] Starting automated news check (OTV, Dharitri & Google News)...');
   
   const otvLinks = await getOTVLinks();
   const dharitriLinks = await getDharitriLinks();
-  const allLinks = [...otvLinks, ...dharitriLinks];
+  const googleNewsLinks = await getGoogleNewsLinks();
+  const allLinks = [...otvLinks, ...dharitriLinks, ...googleNewsLinks];
   
   if (allLinks.length === 0) {
     console.log('[Auto-Blogger] No articles harvested from source sites.');
@@ -116,13 +146,29 @@ const runAutoBlogger = async () => {
         ? mapTagsToCategories(summaryResult.tags) 
         : 'Odisha';
 
+      // Detect news source name
+      let sourceName = 'Google News';
+      if (url.includes('odishatv.in')) {
+        sourceName = 'OTV News';
+      } else if (url.includes('dharitri.com')) {
+        sourceName = 'Dharitri News';
+      } else {
+        // Extract domain name as source
+        try {
+          const domain = new URL(url).hostname.replace('www.', '');
+          sourceName = domain.charAt(0).toUpperCase() + domain.slice(1);
+        } catch (e) {
+          sourceName = 'Google News';
+        }
+      }
+
       const newsData = {
         title: summaryResult.headline || scraped.title,
         odiaHeadline: summaryResult.odiaHeadline,
         summary: summaryResult.summary,
         image: scraped.image || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=800&q=80',
         category: category,
-        source: url.includes('odishatv.in') ? 'OTV News' : 'Dharitri News',
+        source: sourceName,
         sourceUrl: url,
         author: 'AI Auto-Blogger',
         tags: summaryResult.tags || ['Odisha', 'AutoPost'],
